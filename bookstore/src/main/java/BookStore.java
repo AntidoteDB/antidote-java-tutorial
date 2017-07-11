@@ -19,13 +19,23 @@ public class BookStore {
 	}
 	
 	@Command //test command
-	public int inccounter(String bucket, String key){
+	public int inc(String bucket, String key){
 		return DemoCommandsExecutor.incCounter(currentSession, bucket, key);
 	}
 	
+	@Command
+	public int getcounter(String bucket, String key){
+		return DemoCommandsExecutor.getCounter(currentSession, bucket, key);
+	}
+	
 	@Command 
-	public List<String> addtoset(String bucket, String key, String item){
+	public List<String> additem(String bucket, String key, String item){
 		return DemoCommandsExecutor.addToSet(currentSession, bucket, key, item);
+	}
+	
+	@Command
+	public List<String> getset(String bucket, String key){
+		return DemoCommandsExecutor.getSet(currentSession, bucket, key);
 	}
 	
 	@Command //connect antidote
@@ -67,8 +77,13 @@ public class BookStore {
 		return (new BookCommands().borrowBook(fromUser, byUser, book));
 	}
 	
+	@Command
+	public String returnbook(String ToUser, String byUser, String book){		
+		return (new BookCommands().borrowBook(ToUser, byUser, book));
+	}
+	
 	public static void main(String[] args) throws IOException {
-	    ShellFactory.createConsoleShell("antidotebookstore", "", new BookStore())
+	    ShellFactory.createConsoleShell("bookstore@antidote"+args[0], "", new BookStore())
 	        .commandLoop();
 	}
 }

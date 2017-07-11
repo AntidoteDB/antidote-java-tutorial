@@ -13,18 +13,30 @@ import eu.antidotedb.client.SetRef;
 public class DemoCommandsExecutor {
 	
 	//increment a counter without wrapping it in a transaction
-	public static int incCounter(AntidoteClient client, String cbucket, String key){
-		Bucket<String> bucket = Bucket.create(cbucket);
-		CounterRef cnt = bucket.counter(key);
+	public static int incCounter(AntidoteClient client, String bucket, String key){
+		Bucket<String> cbucket = Bucket.create(bucket);
+		CounterRef cnt = cbucket.counter(key);
 		cnt.increment(client.noTransaction());
+		return cnt.read(client.noTransaction());
+	}
+	
+	public static int getCounter(AntidoteClient client, String bucket, String key){
+		Bucket<String> cbucket = Bucket.create(bucket);
+		CounterRef cnt = cbucket.counter(key);
 		return cnt.read(client.noTransaction());
 	}
 
 	//update a set without wrapping it in a transaction
-	public static List<String> addToSet(AntidoteClient client, String cbucket, String key, String elem){
-		Bucket<String> bucket = Bucket.create(cbucket);
-		SetRef<String> set = bucket.set(key);
+	public static List<String> addToSet(AntidoteClient client, String bucket, String key, String elem){
+		Bucket<String> cbucket = Bucket.create(bucket);
+		SetRef<String> set = cbucket.set(key);
 		set.add(client.noTransaction(),elem);
+		return set.read(client.noTransaction());
+	}
+	
+	public static List<String> getSet(AntidoteClient client, String bucket, String key){
+		Bucket<String> cbucket = Bucket.create(bucket);
+		SetRef<String> set = cbucket.set(key);
 		return set.read(client.noTransaction());
 	}
 		

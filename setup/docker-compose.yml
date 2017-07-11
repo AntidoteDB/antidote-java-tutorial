@@ -30,7 +30,7 @@ services:
     image: java:8
     volumes:
       - ../bookstore/build/libs:/code
-    command: "java -jar bookstore.jar"
+    command: "java -jar bookstore.jar 1"
     working_dir: /code
     cap_add:
       - NET_ADMIN
@@ -41,7 +41,7 @@ services:
     image: java:8
     volumes:
       - ../bookstore/build/libs:/code
-    command: "java -jar bookstore.jar"
+    command: "java -jar bookstore.jar 2"
     working_dir: /code
     cap_add:
       - NET_ADMIN
