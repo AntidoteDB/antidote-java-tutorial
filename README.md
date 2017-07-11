@@ -6,6 +6,7 @@ This is a sample application to demonstrate how to build applications that use A
 
 ### What you need
 * An IDE for java development
+* [Gradle](https://gradle.org/) build tool
 * [Docker](https://docs.docker.com/engine/installation/)
 * [docker-compose](https://docs.docker.com/compose/install/)
 
