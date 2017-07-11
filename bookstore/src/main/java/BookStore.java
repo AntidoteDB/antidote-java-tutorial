@@ -53,33 +53,43 @@ public class BookStore {
 	/* *** BookStore commands *** */
 	
 	@Command
+	public void userinfo(String username){
+		new BookCommands().getUserInfo(currentSession, username);
+	}
+	
+	@Command
 	public String adduser(String username, String userEmail){
-		return (new BookCommands().addUser(username, userEmail));
+		return (new BookCommands().addUser(currentSession, username, userEmail));
 	}
 	
 	@Command
 	public String ownbook(String username, String book){
-		return (new BookCommands().addOwnedBooks(username, book));
+		return (new BookCommands().addOwnedBooks(currentSession, username, book));
 	}
 	
 	@Command
 	public List<String> getownedbook(String username){
-		return (new BookCommands().getOwnedBooks(username));
+		return (new BookCommands().getOwnedBooks(currentSession, username));
 	}
 	
 	@Command
 	public String removeownedbook(String username, String book){
-		return (new BookCommands().removeOwnedBook(username, book));
+		return (new BookCommands().removeOwnedBook(currentSession, username, book));
 	}
 	
 	@Command
 	public String borrowbook(String fromUser, String byUser, String book){		
-		return (new BookCommands().borrowBook(fromUser, byUser, book));
+		return (new BookCommands().borrowBook(currentSession, fromUser, byUser, book));
 	}
 	
 	@Command
-	public String returnbook(String ToUser, String byUser, String book){		
-		return (new BookCommands().borrowBook(ToUser, byUser, book));
+	public List<String> getborrowedbook(String username){
+		return (new BookCommands().getBorrowedBooks(currentSession, username));
+	}
+	
+	@Command
+	public String returnbook(String fromUser, String toUser, String book){		
+		return (new BookCommands().returnBook(currentSession, fromUser, toUser, book));
 	}
 	
 	public static void main(String[] args) throws IOException {
