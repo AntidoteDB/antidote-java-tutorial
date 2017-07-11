@@ -1,29 +1,51 @@
 import java.util.List;
+import eu.antidotedb.client.AntidoteClient;
 
 
 public class BookCommands {
-		
-	public String addUser(String username, String userEmail){
-		
-		return null;		
+			
+	public void getUserInfo(AntidoteClient client, String username){
+		System.out.println("User: " + username);
+		System.out.println("Email: " + getEmail(client, username));
+		System.out.println("Owned Books: " + getOwnedBooks(client, username));
+		System.out.println("Borrowed Books: " + getBorrowedBooks(client, username));
+	}
+	
+	public String addUser(AntidoteClient client, String username, String userEmail){
+		not_implemented();
+		return null;
 	}
 
-	public String addOwnedBooks(String username, String book){
+	public String getEmail(AntidoteClient client, String username){
+		not_implemented();
+		return null;
+	}
+	public String addOwnedBooks(AntidoteClient client, String username, String book){
 		not_implemented();
 		return null;
 	}
 	
-	public List<String> getOwnedBooks(String username){
+	public List<String> getOwnedBooks(AntidoteClient client, String username){
 		not_implemented();
 		return null;
 	}
 	
-	public String removeOwnedBook(String username, String book){
+	public String removeOwnedBook(AntidoteClient client, String username, String book){
 		not_implemented();
 		return null;
 	}
 	
-	public String borrowBook(String fromUser, String byUser, String book){
+	public String borrowBook(AntidoteClient client, String fromUser, String byUser, String book){
+		not_implemented();
+		return null;
+	}
+	
+	public String returnBook(AntidoteClient client, String fromUser, String toUser, String book){
+		not_implemented();
+		return null;
+	}
+	
+	public List<String> getBorrowedBooks(AntidoteClient client, String username) {
 		not_implemented();
 		return null;
 	}
