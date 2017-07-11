@@ -63,7 +63,7 @@ public class BookStore {
 	}
 	
 	@Command
-	public String[] getownedbook(String username){
+	public List<String> getownedbook(String username){
 		return (new BookCommands().getOwnedBooks(username));
 	}
 	

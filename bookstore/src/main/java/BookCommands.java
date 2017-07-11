@@ -1,8 +1,10 @@
+import java.util.List;
+
 
 public class BookCommands {
 		
 	public String addUser(String username, String userEmail){
-		not_implemented();
+		
 		return null;		
 	}
 
@@ -11,7 +13,7 @@ public class BookCommands {
 		return null;
 	}
 	
-	public String[] getOwnedBooks(String username){
+	public List<String> getOwnedBooks(String username){
 		not_implemented();
 		return null;
 	}
@@ -27,6 +29,6 @@ public class BookCommands {
 	}
 	
 	void not_implemented(){
-		System.out.println("Not implemented");
+		throw new RuntimeException("Not Implemented");
 	}
 }
