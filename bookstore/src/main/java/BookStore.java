@@ -2,14 +2,14 @@ import java.io.IOException;
 import java.util.List;
 
 import eu.antidotedb.client.AntidoteClient;
-import eu.antidotedb.client.Host;
+import java.net.InetSocketAddress;
 
 import asg.cliche.Command;
 import asg.cliche.ShellFactory;
 
 public class BookStore {
 	
-	AntidoteClient currentSession;
+	private AntidoteClient currentSession;
 	
 	/* *** Demo Commands *** */
 	
@@ -40,7 +40,7 @@ public class BookStore {
 	
 	@Command //connect antidote
 	public String connect(String host, int port){
-		currentSession = new AntidoteClient(new Host(host, port));
+		currentSession = new AntidoteClient(new InetSocketAddress(host, port));
 		return "Connected to " + host+":"+port;
 	}
 	

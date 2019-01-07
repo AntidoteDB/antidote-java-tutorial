@@ -24,7 +24,7 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     
     //Antidote java client library
-    compile group: 'eu.antidotedb', name: 'antidote-java-client', version: '0.0.5'
+    compile group: 'eu.antidotedb', name: 'antidote-java-client', version: '0.3.0'
     
     //for command line shell
     compile files("lib/asg.cliche-110413.jar")

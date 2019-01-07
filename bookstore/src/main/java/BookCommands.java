@@ -50,7 +50,7 @@ public class BookCommands {
 		return null;
 	}
 	
-	void not_implemented(){
+	private void not_implemented(){
 		throw new RuntimeException("Not Implemented");
 	}
 }
