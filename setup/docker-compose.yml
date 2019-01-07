@@ -59,8 +59,7 @@ services:
     cap_add:
       - NET_ADMIN
     networks:
-      - local1
-      - local2
+      - interdc
 
 networks:
   interdc:
