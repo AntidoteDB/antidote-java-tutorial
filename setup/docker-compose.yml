@@ -48,6 +48,20 @@ services:
     networks:
       - local2
 
+  server_tutorial:
+    image: java:8
+    volumes:
+      - ../bookstore/build/libs:/code
+    command: "java -jar bookstore.jar -t"
+    working_dir: /code
+    environment:
+      - ANTIDOTE_TUTORIAL_SAVE=0
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - local1
+      - local2
+
   link:
     image: erlang:19
     volumes:
