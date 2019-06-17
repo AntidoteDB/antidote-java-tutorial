@@ -27,7 +27,7 @@ dependencies {
     compile group: 'eu.antidotedb', name: 'antidote-java-client', version: '0.3.0'
     
     //for command line shell
-    compile files("lib/asg.cliche-110413.jar")
+    compile group: 'com.googlecode.clichemaven', name: 'cliche', version: '110413'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
