@@ -19,6 +19,25 @@ This repository is divided into two source directories:
 | Note: make sure you have the software requirements listed above before following next steps. |
 | --- |
 
+## Interactive Tutorial / Game
+The interactive tutorial is an executable that presents a series of tasks/challenges. Each task has an outcome, SUCCESS or FAIL.
+Solving a task allows you to try out the next task.
+To try the interactive tutorial:
+* Follow steps 1 and 2 bellow, and then:
+```bash
+# in setup/
+./tutorial.sh
+```
+
+Notes:
+* Solving the interactive tutorial is equivalent to following steps 3, 4 and 5 bellow.
+* To reset you progress:
+```bash
+# in setup/
+./stop_antidote.sh
+./start_antidote.sh
+```
+
 ### Step 1: Build Bookstore application
 First we need to build the source code of our Bookstore application, we will use Gradle as follows:
 ```bash
