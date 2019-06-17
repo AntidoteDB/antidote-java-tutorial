@@ -11,6 +11,9 @@ This tutorial is made for [Antidote Bookstore Tutorial](https://github.com/Antid
 * [Docker](https://docs.docker.com/engine/installation/)
 * [docker-compose](https://docs.docker.com/compose/install/)
 
+## Clone source code
+git clone https://github.com/AntidoteDB/antidote-java-tutorial
+
 ## Getting started
 This repository is divided into two source directories:
 * `setup`: scripts and docker files for running two instances of Antidote and two instances of the Java application
@@ -18,25 +21,6 @@ This repository is divided into two source directories:
 
 | Note: make sure you have the software requirements listed above before following next steps. |
 | --- |
-
-## Interactive Tutorial / Game
-The interactive tutorial is an executable that presents a series of tasks/challenges. Each task has an outcome, SUCCESS or FAIL.
-Solving a task allows you to try out the next task.
-To try the interactive tutorial:
-* Follow steps 1 and 2 bellow, and then:
-```bash
-# in setup/
-./tutorial.sh
-```
-
-Notes:
-* Solving the interactive tutorial is equivalent to following steps 3, 4 and 5 bellow.
-* To reset you progress:
-```bash
-# in setup/
-./stop_antidote.sh
-./start_antidote.sh
-```
 
 ### Step 1: Build Bookstore application
 First we need to build the source code of our Bookstore application, we will use Gradle as follows:
@@ -56,7 +40,26 @@ The following script starts two antidote docker containers and set up the inter-
 ./start_antidote.sh
 ```
 
-### Step 3 : Starting the application
+### Step 3 : Interactive Tutorial / Game
+The interactive tutorial is an executable that presents a series of tasks/challenges. Each task has an outcome, SUCCESS or FAIL.
+Solving a task allows you to try out the next task.
+To try the interactive tutorial:
+```bash
+# in setup/
+./tutorial.sh
+```
+
+To reset your progress:
+```bash
+# in setup/
+./stop_antidote.sh
+./start_antidote.sh
+```
+| Note: Solving the interactive tutorial is equivalent to following steps 4, 5 and 6 bellow. Alternatively, you can skip this step and go directly to step 4.
+| --- |
+
+
+### Step 4 : Starting the application
 Open two shells:
 * In the first one, start the first app:
 ```bash
@@ -77,7 +80,7 @@ Now we built this configuration:
 
 ![Tutorial Figure](./doc/tutorial-figure.png "Tutorial figure")
 
-### Step 4 : Try the following app commands
+### Step 5 : Try the following app commands
 Some commands are already implemented in the app, lets try them:
 ~~~~
 inc testbucket mycounter
@@ -107,11 +110,13 @@ To stop Antidote Nodes:
 ./stop_antidote.sh
 ```
 
-### Step 5 : Hands On!!!
+### Step 6 : Hands On!!!
 We now want to build our Bookstore app. The provided sources are divided into 3 files (located in bookstore/src/main/):
 * `BookStore.java`: this file contains the command interface and the starting point of the app.
 * `DemoCommandsExecutor.java`: this file contains the implementation of the demo commands we have seen in the previous Step. You can use them as examples to implement your own commands.
 * `BookCommands.java`: Here is the file where you need to implement Bookstore commands, fill in the methods to add necessary.
+
+The main method is located at bookstore/src/main/java/BookStore.java.
 
 ### Resources:
 Some useful references:
