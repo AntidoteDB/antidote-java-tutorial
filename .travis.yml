@@ -1,0 +1,7 @@
+sudo: required
+services:
+  - docker
+language: java
+jdk:
+  - openjdk11
+before_script: cd bookstore
