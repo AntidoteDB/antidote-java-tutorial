@@ -21,7 +21,7 @@ public class Tester {
     final private int task4Port = 8087;
     final private String tutBucket = "tutorial_buck";
     final private String task1Counter = "task1_counter";
-    final private String task1Set = "task1_counter_set";
+    final private String task1Set = "task1_set";
     final private String user1 = "Bob";
     final private String user2 = "Alice";
     final private String bookTitle = "book1";
@@ -246,10 +246,12 @@ public class Tester {
                 "This demo application is a small shell that uses AntidoteDB as a backend database. Type:\n" +
                 "bookstore@antidote> ?l \nto see the list of available commands, and:\n" +
                 "bookstore@antidote> ?help <some_command>\nto see details about a command\n\n" +
-                "To pass this task the counter \"" + task1Counter + "\" needs to have a value greater that 3 " +
+                "To pass this task, the counter \"" + task1Counter + "\" needs to have a value greater that 3, " +
                 "and the set \"" + task1Set + "\" needs to have at least 3 elements,\n" +
                 "both in bucket \"" + tutBucket + "\".\n" +
-                "You can try update the same objects in both shells to see how AntidoteDB replicates update between \nreplicas.\n" +
+                "You can try to update the same objects in both shells to see how AntidoteDB replicates update between \nreplicas.\n\n" +
+                "Hint: this command increments a counter: inc <bucket_name> <counter_name>\n" +
+                "Hint: this command adds an item to a set: additem <bucket_name> <set_name> <item_value>\n" +
                 "================================\n";
         System.out.println(msg);
     }
@@ -263,9 +265,9 @@ public class Tester {
                 "in setup/\n./disconnect.sh\n" +
                 "You can now continue to issue commands in bookstore@antidote1 and bookstore@antidote2.\n" +
                 "Notice that the values at each replica diverge\n\n" +
-                "To pass this task the counter \"" + task1Counter + "\" needs to have a lower value in bookstore@antidote1 than\n" +
-                "in bookstore@antidote2 and the set \"" + task1Set + "\" needs to have a greater value in bookstore@antidote1 than\n" +
-                "in bookstore@antidote (both in bucket \"" + tutBucket + "\").\n" +
+                "To pass this task, the counter \"" + task1Counter + "\" needs to have a greater value in bookstore@antidote1 than\n" +
+                "in bookstore@antidote2, and the set \"" + task1Set + "\" needs to have less elements in bookstore@antidote1 than\n" +
+                "in bookstore@antidote2 (both in bucket \"" + tutBucket + "\").\n" +
                 "================================\n";
         System.out.println(msg);
     }

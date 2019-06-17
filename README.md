@@ -12,6 +12,9 @@ This tutorial is made for [Antidote Bookstore Tutorial](https://github.com/Antid
 ## Clone source code
 git clone https://github.com/AntidoteDB/antidote-java-tutorial
 
+## Clone source code
+git clone https://github.com/AntidoteDB/antidote-java-tutorial
+
 ## Getting started
 This repository is divided into two source directories:
 * `setup`: scripts and docker files for running two instances of Antidote and two instances of the Java application
@@ -53,7 +56,26 @@ In case you want to reset your progress:
 | --- |
 
 
-### Step 3 : Starting the application
+### Step 3 : Interactive Tutorial / Game
+The interactive tutorial is an executable that presents a series of tasks/challenges. Each task has an outcome, SUCCESS or FAIL.
+Solving a task allows you to try out the next task.
+To try the interactive tutorial:
+```bash
+# in setup/
+./tutorial.sh
+```
+
+To reset your progress:
+```bash
+# in setup/
+./stop_antidote.sh
+./start_antidote.sh
+```
+| Note: Solving the interactive tutorial is equivalent to following steps 4, 5 and 6 bellow. Alternatively, you can skip this step and go directly to step 4.
+| --- |
+
+
+### Step 4 : Starting the application
 Open two shells:
 * In the first one, start the first app:
 ```bash
@@ -83,7 +105,7 @@ We have now deployed this configuration:
 
 ![Tutorial Figure](./doc/tutorial-figure.png "Tutorial figure")
 
-### Step 4 : Try the following app commands
+### Step 5 : Try the following app commands
 Some commands are already implemented in the app, lets try them:
 ~~~~
 bookstore@antidote> inc testbucket mycounter
@@ -113,7 +135,7 @@ To stop the two Antidote Nodes:
 ./stop_antidote.sh
 ```
 
-### Step 5 : Hands On!!!
+### Step 6 : Hands On!!!
 We now want to build our Bookstore app. The provided sources are divided into 3 files (located in bookstore/src/main/):
 * `BookStore.java`: this file contains the command interface and the starting point of the app.
 * `DemoCommandsExecutor.java`: this file contains the implementation of the demo commands we have seen in the previous Step. You can use them as examples to implement your own commands.
