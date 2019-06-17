@@ -23,15 +23,15 @@ public class DemoCommandsExecutor {
 	//update a set without wrapping it in a transaction
 	public static List<String> addToSet(AntidoteClient client, String bucket, String key, String elem){
 		Bucket cbucket = Bucket.bucket(bucket);
-		SetKey setKey = Key.set(key);
+		SetKey<String> setKey = Key.set(key);
 		cbucket.update(client.noTransaction(), setKey.add(elem));
-		return (List<String>) cbucket.read(client.noTransaction(), setKey);
+		return cbucket.read(client.noTransaction(), setKey);
 	}
 	
 	public static List<String> getSet(AntidoteClient client, String bucket, String key){
 		Bucket cbucket = Bucket.bucket(bucket);
-		SetKey setKey = Key.set(key);
-		return (List<String>) cbucket.read(client.noTransaction(),setKey);
+		SetKey<String> setKey = Key.set(key);
+		return cbucket.read(client.noTransaction(),setKey);
 	}
 		
 	//update and read with in a transaction
