@@ -113,6 +113,7 @@ public class BookStore {
             Tester tutorial = new Tester();
             tutorial.test();
         } else
+            System.out.println("Don't forget to connect to an AntidoteDB node before issuing commands using the 'connect' command.");
             ShellFactory.createConsoleShell("bookstore@antidote"+args[0], "", new BookStore())
                     .commandLoop();
     }

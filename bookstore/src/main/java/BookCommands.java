@@ -20,7 +20,7 @@ public class BookCommands {
         not_implemented();
     }
 
-    public void updateMapRegister(AntidoteClient client, String bucket, String key, String mapKey, String value) {
+    public void updateMapRegister(AntidoteClient client, String bucket, String key, String entryKey, String value) {
         not_implemented();
     }
 
