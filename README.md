@@ -54,7 +54,7 @@ In case you want to reset your progress:
 
 
 ### Step 3 : Starting the application
-Open two new shells:
+Open two shells:
 * In the first one, start the first app:
 ```bash
 # in setup/
