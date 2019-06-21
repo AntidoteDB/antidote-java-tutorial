@@ -5,12 +5,6 @@ import java.net.InetSocketAddress;
 
 public class BookCommands {
 
-    public static String userBucket = "userbucket";
-
-    public static final RegisterKey<String> emailMapField = Key.register("email");
-    public static final SetKey<String> ownBooksMapField = Key.set("ownbooks");
-    public static final SetKey<String> borrowedBooksMapField = Key.set("borrowedbooks");
-
     public AntidoteClient connect(String host, int port) {
         not_implemented();
         return null;
@@ -42,7 +36,7 @@ public class BookCommands {
     }
     public String addOwnedBooks(AntidoteClient client, String username, String book){
         not_implemented();
-        return null;
+        return "added" + book;
     }
 
     public List<String> getOwnedBooks(AntidoteClient client, String username){
@@ -52,17 +46,17 @@ public class BookCommands {
 
     public String removeOwnedBook(AntidoteClient client, String username, String book){
         not_implemented();
-        return null;
+        return "removed" + book;
     }
 
-    public String borrowBook(AntidoteClient client, String fromUser, String byUser, String book){
+    public String borrowBook(AntidoteClient client, String fromUser, String toUser, String book){
         not_implemented();
-        return null;
+        return "ok";
     }
 
     public String returnBook(AntidoteClient client, String fromUser, String toUser, String book){
         not_implemented();
-        return null;
+        return "ok";
     }
 
     public List<String> getBorrowedBooks(AntidoteClient client, String username) {
