@@ -287,6 +287,8 @@ public class Tester {
                 "In this task you will learn to open a connection to an AntidoteDB node.\n" +
                 "Implement the connect() method. The method should receive as arguments a hostname and a port number,\n" +
                 "initiates a connection to the corresponding AntidoteDB node, and return the connection object\n" +
+                "To re-build the application after modifying the source code:\n" +
+                "root@tutorial$ ./gradlew build\n" +
                 "================================\n\n" +
                 "Here is a useful reference for the rest of the tasks:\n" +
                 "https://www.javadoc.io/doc/eu.antidotedb/antidote-java-client/0.3.0\n\n" +
