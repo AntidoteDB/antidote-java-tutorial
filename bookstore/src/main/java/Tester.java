@@ -22,7 +22,13 @@ public class Tester {
     final private String tutBucket = "tutorial_buck";
     final private String task1Counter = "task1_counter";
     final private String task1Set = "task1_set";
+    final private String task5Register = "task5_register";
+    final private String task5Value = "task5_value";
+    final private String task6Map = "task6_map";
+    final private String task6EntryKey = "key";
+    final private String task6Value = "value";
     final private String user1 = "Bob";
+    final private String user1Mail = "bob@mail.com";
     final private String user2 = "Alice";
     final private String bookTitle = "book1";
 
@@ -139,13 +145,13 @@ public class Tester {
     private boolean testTask05() {
         BookCommands bookCmds = new BookCommands();
         try {
-            bookCmds.assignToRegister(tutorialStateSession1, tutBucket, "task5_register", "task5_value");
+            bookCmds.assignToRegister(tutorialStateSession1, tutBucket, task5Register, task5Value);
         } catch (Exception e) {
             System.out.println(e);
             return false;
         }
-        String regValue = Bucket.bucket(tutBucket).read(taskSession.noTransaction(),  Key.register("task5_register"));
-        if (regValue.equals(new String("task5_value")))
+        String regValue = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(),  Key.register(task5Register));
+        if (regValue.equals(new String(task5Value)))
             return true;
         return false;
     }
@@ -153,13 +159,13 @@ public class Tester {
     private boolean testTask06() {
         BookCommands bookCmds = new BookCommands();
         try {
-            bookCmds.updateMapRegister(tutorialStateSession1, tutBucket, "task6_map", "key", "value");
+            bookCmds.updateMapRegister(tutorialStateSession1, tutBucket, task6Map, task6EntryKey, task6Value);
         } catch (Exception e) {
             System.out.println(e);
             return false;
         }
-        MapKey.MapReadResult mapReadResult = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr("task6_map"));
-        if (mapReadResult.get(Key.register("key")).equals("value"))
+        MapKey.MapReadResult mapReadResult = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(task6Map));
+        if (mapReadResult.get(Key.register(task6EntryKey)).equals(task6Value))
             return true;
         return false;
     }
@@ -167,7 +173,7 @@ public class Tester {
     private boolean testTask07() {
         try {
             MapKey.MapReadResult userInfo = Bucket.bucket(BookCommands.userBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(user1));
-            if (userInfo.get(BookCommands.emailMapField).equals("bob@mail.com"))
+            if (userInfo.get(BookCommands.emailMapField).equals(user1Mail))
                 return true;
             return false;
         } catch (Exception e) {
@@ -237,19 +243,13 @@ public class Tester {
     private void printTask01() {
         String msg = "\nTask 01 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
-                "Open two new shells. In both shells navigate to antidote-java-tutorial/setup/\n" +
-                "In the first shell start the first demo application:\n> ./app1.sh\n" +
-                "and then connect the application to replica 1 of AntidoteDB\n" +
-                "bookstore@antidote1> connect antidote1 8087\n\n" +
-                "Follow the same steps for the second application:\n" +
-                "> ./app2.sh \nbookstore@antidote2> connect antidote2 8087\n\n" +
+                "Follow Step 3 in README.md to create two new shells with two instances of the shell application.\n" +
                 "This demo application is a small shell that uses AntidoteDB as a backend database. Type:\n" +
                 "bookstore@antidote> ?l \nto see the list of available commands, and:\n" +
-                "bookstore@antidote> ?help <some_command>\nto see details about a command\n\n" +
-                "To pass this task, the counter \"" + task1Counter + "\" needs to have a value greater that 3, " +
-                "and the set \"" + task1Set + "\" needs to have at least 3 elements,\n" +
-                "both in bucket \"" + tutBucket + "\".\n" +
-                "You can try to update the same objects in both shells to see how AntidoteDB replicates update between \nreplicas.\n\n" +
+                "bookstore@antidote> ?help <some_command>\nto see details about a command.\n\n" +
+                "To pass this task, the counter \"" + task1Counter + "\" needs to have a value greater that 3, and the set\n" +
+                "\"" + task1Set + "\" needs to have at least 3 elements, both in bucket \"" + tutBucket + "\".\n" +
+                "You can try to update the same objects in both shells to see how AntidoteDB propagates updates \nbetween replicas.\n\n" +
                 "Hint: this command increments a counter: inc <bucket_name> <counter_name>\n" +
                 "Hint: this command adds an item to a set: additem <bucket_name> <set_name> <item_value>\n" +
                 "================================\n";
@@ -287,13 +287,14 @@ public class Tester {
                 "--------------------------------\n" +
                 "Let's now take a look at the interface of the AntidoteDB Java client.\n" +
                 "In each task you will be asked to implement a class method using the Java client API.\n" +
-                "All methods are located in bookstore/src/main/BookCommands.java .\n" +
-                "In this task you will learn to open a connection to an AntidoteDB note.\n" +
+                "All methods are located in bookstore/src/main/java/BookCommands.java .\n" +
+                "In this task you will learn to open a connection to an AntidoteDB node.\n" +
                 "Implement the connect() method. The method should receive as arguments a hostname and a port number,\n" +
                 "initiates a connection to the corresponding AntidoteDB node, and return the connection object\n" +
                 "================================\n\n" +
                 "Here is a useful reference for the rest of the tasks:\n" +
-                "https://www.javadoc.io/doc/eu.antidotedb/antidote-java-client/0.3.0\n";
+                "https://www.javadoc.io/doc/eu.antidotedb/antidote-java-client/0.3.0\n\n" +
+                "Note: Remember to recompile the source code after making changes by invoking \"./gradlew build\" \nin bookstore/\n";
         System.out.println(msg);
     }
 
@@ -318,6 +319,7 @@ public class Tester {
                 "a map entry key, and a string value, and add a new entry to a CRDT map with the given object key, in the given bucket. " +
                 "The new entry should be a last-writer-wins register with the given map entry key.\n" +
                 "Finally, assign the given value to the register.\n" +
+                "Use the remove-resets map datatype (map_rr).\n"+
                 "================================\n";
         System.out.println(msg);
     }
