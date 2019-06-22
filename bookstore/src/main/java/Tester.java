@@ -325,7 +325,7 @@ public class Tester {
     private void printTask07() {
         String msg = "\nTask 07 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
-                "Now that you seen the basics of using the AntidoteDB Java client, let's put this knowledge in use in \norder to build an application that uses AntidoteDB as a backend database.\n" +
+                "Now that you have seen the basics of using the AntidoteDB Java client, let's put this knowledge in use in \norder to build an application that uses AntidoteDB as a backend database.\n" +
                 "As you may have noticed, the shell application has a few additional commands such as userinfo,\nadduser, and ownbook. " +
                 "These commands implement a simple Bookstore application in which users can \ncreate accounts, register the books they own, and borrow books from other users.\n" +
                 "For this task, implement the addUser() and getEmail() methods (also located in \nbookstore/src/main/java/BookCommands.java)\n" +
