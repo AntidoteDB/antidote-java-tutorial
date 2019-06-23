@@ -20,11 +20,13 @@ This repository is divided into two source directories:
 | Note: make sure you have the software requirements listed above before following next steps. |
 | --- |
 
-### Step 1 : Starting antidote nodes
-The following script starts two antidote docker containers and set up the inter-dc replication.
+### Step 1: Antidote-kernel Jupyter Notebook
+The [Jupyter](https://jupyter.org) Antidote kernel is a Jupyter kernel based on the [Jupyter Groovy Kernel](https://github.com/lappsgrid-incubator/jupyter-groovy-kernel) that connects to Antidote services. It allows users to interact with Antidote databases and observe how Antidote resolves inconsistencies in case of network failure.
+
+To start up the Antidote-kernel notebook:
 ```bash
 # in setup/
-./start_antidote.sh
+$ docker-compose up
 ```
 
 ### Step 2 : Interactive Tutorial / Game
@@ -32,33 +34,40 @@ The interactive tutorial is an executable that presents a series of tasks/challe
 Solving a task allows you to try out the next task.
 To try the interactive tutorial:
 
-Open a new shell:
+First we need to start two Antidote docker containers and set up the inter-dc replication.
+
+You can either keep the Jupyter Notebook from Step 1 active as it has already deployed this setup.
+
+Alternatively, to start the Antidote containers in the background use the following script (let's label this shell as _setup shell_ for later reference):
 ```bash
 # in setup/
-./tutorial_setup.sh
+$ ./start_antidote.sh
+```
+
+To start the tutorial, open a new shell (we label this shell _tutorial shell_):
+```bash
+# in setup/
+$ ./tutorial_setup.sh
 # build the tutorial
 root@tutorial$ ./gradlew build
 # run the tutorial executable
 root@tutorial$ ./tutorial.sh
 ```
 
-In case you want to reset your progress:
-```bash
-# in setup/
-./stop_antidote.sh
-./start_antidote.sh
+In case you want to reset your progress, in the _setup shell_ do:
+```bash_
+$ ./stop_antidote.sh
+$ ./start_antidote.sh
 ```
 
-| Note: Solving the interactive tutorial is equivalent to following steps 3, 4 and 5 bellow. Alternatively, you can skip this step and go directly to step 3.
-| --- |
+Here are some bits of information that will be useful in various parts of the interactive tutorial:
 
-
-### Step 3 : Starting the application
-Open two shells:
-* In the first one, start the first app:
+#### Starting the Bookstore application
+Open two new shells:
+* In the first one, start the first app (we label this shell _app1 shell_):
 ```bash
 # in setup/
-./app1_setup.sh
+$ ./app1_setup.sh
 # build the app code
 root@app1$ ./gradlew build
 # and start the app
@@ -67,10 +76,10 @@ root@app1$ ./app1.sh
 bookstore@antidote1 > connect antidote1 8087
 ```
 
-* We will do the same for the second app:
+* Do the same for the second app (we label this shell _app2 shell_):
 ```bash
 # in setup/
-./app2_setup.sh
+$ ./app2_setup.sh
 # build the app code
 root@app2$ ./gradlew build
 # and start the app
@@ -83,52 +92,30 @@ We have now deployed this configuration:
 
 ![Tutorial Figure](./doc/tutorial-figure.png "Tutorial figure")
 
-### Step 4 : Try the following app commands
-Some commands are already implemented in the app, lets try them:
-~~~~
-bookstore@antidote> inc testbucket mycounter
-bookstore@antidote> getcounter testbucket mycounter
-bookstore@antidote> additem testbucket myset newitem
-bookstore@antidote> getset testbucket myset
-~~~~
 
-To stop the app:
-~~~~
-bookstore@antidote> quit
-~~~~
-
-You can also try to disconnect Antidote servers to simulate network partitions, commit some concurrent updates, then reconnect to merge CRDTs:
-~~~~bash
+#### Creating a network partition
+To disconnect the two Antidote servers in order to simulate a network partition, in _setup shell_:
+```bash
 # in setup/
 ./disconnect.sh #to disrupt communication between Antidote1 and Antidote2 nodes
 
 #then update objects while disconnected
 
 ./connect.sh #connect Antidote nodes back
-~~~~
-
-To stop the two Antidote Nodes:
-```bash
-# in setup/
-./stop_antidote.sh
 ```
 
-### Step 5 : Hands On!!!
-We now want to build our Bookstore app. The provided sources are divided into 3 files (located in bookstore/src/main/):
+#### Hands on: Building the Bookstore application
+The provided sources are divided into 3 files (located in bookstore/src/main/java/):
 * `BookStore.java`: this file contains the command interface and the starting point of the app.
 * `DemoCommandsExecutor.java`: this file contains the implementation of the demo commands we have seen in the previous Step. You can use them as examples to implement your own commands.
 * `BookCommands.java`: Here is the file where you need to implement Bookstore commands, fill in the methods to add necessary.
 
 The main method is located at bookstore/src/main/java/BookStore.java.
 
-To re-build the app after modifying the source code:
+To re-build the app after modifying the source code, in the _tutorial shell_:
 ```bash
-some_docker_container$ ./gradlew build
+root@tutorial$ ./gradlew build
 ```
-where `some_docker_container` may be:
-* `root@app1` or
-* `root@app2` or
-* `root@tutorial`
 
 ### Resources:
 Some useful references:
