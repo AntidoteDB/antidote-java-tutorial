@@ -21,8 +21,14 @@ public class Tester {
     final private int task4Port = 8087;
     final private String tutBucket = "tutorial_buck";
     final private String task1Counter = "task1_counter";
-    final private String task1Set = "task1_counter_set";
+    final private String task1Set = "task1_set";
+    final private String task5Register = "task5_register";
+    final private String task5Value = "task5_value";
+    final private String task6Map = "task6_map";
+    final private String task6EntryKey = "key";
+    final private String task6Value = "value";
     final private String user1 = "Bob";
+    final private String user1Mail = "bob@mail.com";
     final private String user2 = "Alice";
     final private String bookTitle = "book1";
 
@@ -139,13 +145,13 @@ public class Tester {
     private boolean testTask05() {
         BookCommands bookCmds = new BookCommands();
         try {
-            bookCmds.assignToRegister(tutorialStateSession1, tutBucket, "task5_register", "task5_value");
+            bookCmds.assignToRegister(tutorialStateSession1, tutBucket, task5Register, task5Value);
         } catch (Exception e) {
             System.out.println(e);
             return false;
         }
-        String regValue = Bucket.bucket(tutBucket).read(taskSession.noTransaction(),  Key.register("task5_register"));
-        if (regValue.equals(new String("task5_value")))
+        String regValue = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(),  Key.register(task5Register));
+        if (regValue.equals(new String(task5Value)))
             return true;
         return false;
     }
@@ -153,21 +159,21 @@ public class Tester {
     private boolean testTask06() {
         BookCommands bookCmds = new BookCommands();
         try {
-            bookCmds.updateMapRegister(tutorialStateSession1, tutBucket, "task6_map", "key", "value");
+            bookCmds.updateMapRegister(tutorialStateSession1, tutBucket, task6Map, task6EntryKey, task6Value);
         } catch (Exception e) {
             System.out.println(e);
             return false;
         }
-        MapKey.MapReadResult mapReadResult = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr("task6_map"));
-        if (mapReadResult.get(Key.register("key")).equals("value"))
+        MapKey.MapReadResult mapReadResult = Bucket.bucket(tutBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(task6Map));
+        if (mapReadResult.get(Key.register(task6EntryKey)).equals(task6Value))
             return true;
         return false;
     }
 
     private boolean testTask07() {
+        BookCommands bookCmds = new BookCommands();
         try {
-            MapKey.MapReadResult userInfo = Bucket.bucket(BookCommands.userBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(user1));
-            if (userInfo.get(BookCommands.emailMapField).equals("bob@mail.com"))
+            if (bookCmds.getEmail(tutorialStateSession1, user1).equals(user1Mail))
                 return true;
             return false;
         } catch (Exception e) {
@@ -177,10 +183,9 @@ public class Tester {
     }
 
     private boolean testTask08() {
+      BookCommands bookCmds = new BookCommands();
         try {
-            MapKey.MapReadResult ownedBooksMapReadResult = Bucket.bucket(BookCommands.userBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(user1));
-            List<String> ownedBooks = ownedBooksMapReadResult.get(BookCommands.ownBooksMapField);
-            if (ownedBooks.contains(new String(bookTitle)))
+          if (bookCmds.getOwnedBooks(tutorialStateSession1, user1).contains(new String(bookTitle)))
                 return true;
             return false;
         } catch(Exception e) {
@@ -190,12 +195,9 @@ public class Tester {
     }
 
     private boolean testTask09() {
+      BookCommands bookCmds = new BookCommands();
         try {
-            MapKey.MapReadResult fromUserReadResult = Bucket.bucket(BookCommands.userBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(user1));
-            List<String> fromUserBooks = fromUserReadResult.get(BookCommands.ownBooksMapField);
-            MapKey.MapReadResult toUserReadResult = Bucket.bucket(BookCommands.userBucket).read(tutorialStateSession1.noTransaction(), Key.map_rr(user2));
-            List<String> toUserBooks = toUserReadResult.get(BookCommands.borrowedBooksMapField);
-            if (!fromUserBooks.contains(new String(bookTitle)) && toUserBooks.contains(new String(bookTitle)))
+          if (!bookCmds.getOwnedBooks(tutorialStateSession1, user1).contains(new String(bookTitle)) && bookCmds.getBorrowedBooks(tutorialStateSession1, user2).contains(new String(bookTitle)))
                 return true;
             return false;
         } catch (Exception e) {
@@ -205,9 +207,9 @@ public class Tester {
     }
 
     private boolean testTask10() {
+      BookCommands bookCmds = new BookCommands();
         try {
-            List<String> borrowedBooks = new BookCommands().getBorrowedBooks(tutorialStateSession1, user2);
-            if (borrowedBooks.contains(new String(bookTitle)))
+            if (bookCmds.getOwnedBooks(tutorialStateSession1, user1).contains(new String(bookTitle)) && !bookCmds.getBorrowedBooks(tutorialStateSession1, user2).contains(new String(bookTitle)))
                 return true;
             return false;
         } catch (Exception e) {
@@ -237,19 +239,15 @@ public class Tester {
     private void printTask01() {
         String msg = "\nTask 01 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
-                "Open two new shells. In both shells navigate to antidote-java-tutorial/setup/\n" +
-                "In the first shell start the first demo application:\n> ./app1.sh\n" +
-                "and then connect the application to replica 1 of AntidoteDB\n" +
-                "bookstore@antidote1> connect antidote1 8087\n\n" +
-                "Follow the same steps for the second application:\n" +
-                "> ./app2.sh \nbookstore@antidote2> connect antidote2 8087\n\n" +
+                "Follow Step 3 in README.md to create two new shells with two instances of the shell application.\n" +
                 "This demo application is a small shell that uses AntidoteDB as a backend database. Type:\n" +
                 "bookstore@antidote> ?l \nto see the list of available commands, and:\n" +
-                "bookstore@antidote> ?help <some_command>\nto see details about a command\n\n" +
-                "To pass this task the counter \"" + task1Counter + "\" needs to have a value greater that 3 " +
-                "and the set \"" + task1Set + "\" needs to have at least 3 elements,\n" +
-                "both in bucket \"" + tutBucket + "\".\n" +
-                "You can try update the same objects in both shells to see how AntidoteDB replicates update between \nreplicas.\n" +
+                "bookstore@antidote> ?help <some_command>\nto see details about a command.\n\n" +
+                "To pass this task, the counter \"" + task1Counter + "\" needs to have a value greater that 3, and the set\n" +
+                "\"" + task1Set + "\" needs to have at least 3 elements, both in bucket \"" + tutBucket + "\".\n" +
+                "You can try to update the same objects in both shells to see how AntidoteDB propagates updates \nbetween replicas.\n\n" +
+                "Hint: this command increments a counter: inc <bucket_name> <counter_name>\n" +
+                "Hint: this command adds an item to a set: additem <bucket_name> <set_name> <item_value>\n" +
                 "================================\n";
         System.out.println(msg);
     }
@@ -263,9 +261,9 @@ public class Tester {
                 "in setup/\n./disconnect.sh\n" +
                 "You can now continue to issue commands in bookstore@antidote1 and bookstore@antidote2.\n" +
                 "Notice that the values at each replica diverge\n\n" +
-                "To pass this task the counter \"" + task1Counter + "\" needs to have a lower value in bookstore@antidote1 than\n" +
-                "in bookstore@antidote2 and the set \"" + task1Set + "\" needs to have a greater value in bookstore@antidote1 than\n" +
-                "in bookstore@antidote (both in bucket \"" + tutBucket + "\").\n" +
+                "To pass this task, the counter \"" + task1Counter + "\" needs to have a greater value in bookstore@antidote1 than\n" +
+                "in bookstore@antidote2, and the set \"" + task1Set + "\" needs to have less elements in bookstore@antidote1 than\n" +
+                "in bookstore@antidote2 (both in bucket \"" + tutBucket + "\").\n" +
                 "================================\n";
         System.out.println(msg);
     }
@@ -285,15 +283,16 @@ public class Tester {
                 "--------------------------------\n" +
                 "Let's now take a look at the interface of the AntidoteDB Java client.\n" +
                 "In each task you will be asked to implement a class method using the Java client API.\n" +
-                "All methods are located in bookstore/src/main/BookCommands.java .\n" +
-                "In this task you will learn to open a connection to an AntidoteDB note.\n" +
+                "All methods are located in bookstore/src/main/java/BookCommands.java .\n" +
+                "In this task you will learn to open a connection to an AntidoteDB node.\n" +
                 "Implement the connect() method. The method should receive as arguments a hostname and a port number,\n" +
                 "initiates a connection to the corresponding AntidoteDB node, and return the connection object\n" +
                 "To re-build the application after modifying the source code:\n" +
                 "root@tutorial$ ./gradlew build\n" +
                 "================================\n\n" +
                 "Here is a useful reference for the rest of the tasks:\n" +
-                "https://www.javadoc.io/doc/eu.antidotedb/antidote-java-client/0.3.0\n";
+                "https://www.javadoc.io/doc/eu.antidotedb/antidote-java-client/0.3.0\n\n" +
+                "Note: Remember to recompile the source code after making changes by invoking \"./gradlew build\" \nin bookstore/\n";
         System.out.println(msg);
     }
 
@@ -318,6 +317,7 @@ public class Tester {
                 "a map entry key, and a string value, and add a new entry to a CRDT map with the given object key, in the given bucket. " +
                 "The new entry should be a last-writer-wins register with the given map entry key.\n" +
                 "Finally, assign the given value to the register.\n" +
+                "Use the remove-resets map datatype (map_rr).\n"+
                 "================================\n";
         System.out.println(msg);
     }
@@ -325,12 +325,12 @@ public class Tester {
     private void printTask07() {
         String msg = "\nTask 07 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
-                "Now that you seen the basics of using the AntidoteDB Java client, let's put this knowledge in use in \norder to build an application that uses AntidoteDB as a backend database.\n" +
+                "Now that you have seen the basics of using the AntidoteDB Java client, let's put this knowledge in use in \norder to build an application that uses AntidoteDB as a backend database.\n" +
                 "As you may have noticed, the shell application has a few additional commands such as userinfo,\nadduser, and ownbook. " +
                 "These commands implement a simple Bookstore application in which users can \ncreate accounts, register the books they own, and borrow books from other users.\n" +
-                "For this task, implement the addUser() method (also located in bookstore/src/main/BookCommands.java)\n" +
-                "The method receives the user's username and email as string. It should store these information in the \ndatabase using the proper data structure.\n" +
-                "Use the \"userBucket\" variable defined in BookCommands.java for the AntidoteDB bucket to store\nBookstore data in.\n" +
+                "For this task, implement the addUser() and getEmail() methods (also located in \nbookstore/src/main/java/BookCommands.java)\n" +
+                "AddUser receives a username and an email as strings. It should store these information in \nthe database using the proper data structure.\n" +
+                "GetEmail receives a username. It should return the email that corresponds to the given username.\n"+
                 "Finally, use the adduser shell command to add a user with username \"" + user1 + "\" and email \"bob@mail.com\".\n" +
                 "================================\n";
         System.out.println(msg);
@@ -338,10 +338,10 @@ public class Tester {
 
     private void printTask08() {
         String msg = "\nTask 08 of the AntidoteDB Java Tutorial\n" +
-                "--------------------------------\n" +
-                "For this task, implement the addOwnedBooks() method.\n" +
-                "The method receives a username and a book title as strings. " +
-                "It should add the given book to the list \nof books owned by the given user (Hint: take a look at the \"ownBooksMapField\" variable defined in \nBookCommands.java).\n" +
+                "-------g -------------------------\n" +
+                "For this task, implement the addOwnedBooks() and getOwnedBooks() methods.\n" +
+                "AddOwnedBooks receives a username and a book title as strings. It should add the given book to the \nset of books owned by the given user.\n" +
+                "GetOwnedBooks receives a username and should return the set of books owned by the given user.\n" +
                 "Finally, use the ownbook shell command to add a book \"" + bookTitle + "\" to the user \"" + user1 + "\".\n" +
                 "================================\n";
         System.out.println(msg);
@@ -351,10 +351,11 @@ public class Tester {
         String msg = "\nTask 09 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
                 "Another Bookstore functionality implementation task.. But this is an interesting one.\n" +
-                "Implement the borrowBook() method. The method receives a book title, the username of the user who \nowns the book (userFrom) and the user who borrows the book (userTo).\n" +
-                "It should remove the given book from the list of books owned by userFrom, and add it to the list of\n" +
-                "books which userTo has borrowed (Hint: the \"borrowedBooksMapField\" variable might be useful).\n" +
-                "Finally, use the borrowbook shell command to indicate that user \"" + user2 + "\" borrows \"" + bookTitle + "\" from user \"" + user1 + "\".\n" +
+                "Implement the borrowBook() and getBorrowedBooks() methods.\n" +
+                "BorrowBook receives a book title, the username of the user who owns the book (userFrom) and the user \nwho borrows the book (userTo).\n" +
+                "It should remove the given book from the set of books owned by userFrom, and add it to the set of \nbooks which userTo has borrowed.\n" +
+                "getBorrowedBooks receives a username and should return the set of book that the given user has \nborrowed.\n" +
+                "Finally, use the borrowbook shell command to indicate that user \"" + user2 + "\" borrows \"" + bookTitle + "\" from user \n\"" + user1 + "\".\n" +
                 "================================\n";
         System.out.println(msg);
     }
@@ -362,9 +363,10 @@ public class Tester {
     private void printTask10() {
         String msg = "\nTask 10 of the AntidoteDB Java Tutorial\n" +
                 "--------------------------------\n" +
-                "For the final task, implement the getBorrowedBooks() method. The method receives the username of\n" +
-                "a user, and returns a list containing the books that the given user has borrowed.\n" +
-                "To pass this task, the list for the user \"" + user2 + "\" should contain the book \"" + bookTitle + "\".\n" +
+                "For the final task, implement the returnBook() method.\n" +
+                "The method receives a book title, the username of the user who has borrowed the book (userFrom), and the username of the user to whom the book is returned to (userTo).\n" +
+                "It should remove the given book from the set of books borrowed by userFrom, and add it to the set of books owned by userTo.\n" +
+                "Finally, use the returnbook shell command to indicate that user \"" + user2 + "\" returns \"" + bookTitle + "\" to user \n\"" + user1 + "\".\n" +
                 "================================\n";
         System.out.println(msg);
     }
